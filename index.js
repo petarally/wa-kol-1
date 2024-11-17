@@ -1,5 +1,8 @@
 import express from "express";
 import fs from "fs";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -85,6 +88,29 @@ app.get("/korisnici/:id", (req, res) => {
   res
     .status(200)
     .json({ korisnik, message: `Uspješno dohvaćen korisnik s id-em ${id}` });
+});
+
+// Zadatak 5
+app.post("/zadatak5", (req, res) => {
+  const body = req.body;
+  const data = readData("data.json");
+  const lastID = Number(data[data.length - 1].id);
+  console.log(typeof lastID);
+  console.log(typeof body.id);
+  body.id = String(lastID + 1);
+  data.push(body);
+  res.status(200).json(data);
+});
+
+// Zadatak 6
+app.post("/protected", (req, res) => {
+  const apiKljuc = req.query.API_KEY;
+  const validApiKey = process.env.API_KEY;
+  if (apiKljuc === validApiKey) {
+    res.status(200).send("Super secret protected content!!!");
+  } else {
+    res.status(403).send("Nemate pristup ovom sadržaju!");
+  }
 });
 
 app.listen(3000, () => {
