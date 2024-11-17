@@ -20,6 +20,18 @@ app.get("/", (req, res) => {
 // Zadatak 2
 app.get("/korisnici", (req, res) => {
   let data = readData("data.json");
+  const { ime, prezime } = req.query;
+  if (ime) {
+    data = data.filter(
+      (korisnik) => korisnik.ime.toLowerCase() === ime.toLowerCase()
+    );
+  }
+
+  if (prezime) {
+    data = data.filter(
+      (korisnik) => korisnik.prezime.toLowerCase() === prezime.toLowerCase()
+    );
+  }
   res.send(data);
 });
 
@@ -65,6 +77,7 @@ app.post("/zadatak4", (req, res) => {
 app.get("/korisnici/:id", (req, res) => {
   const id = req.params.id;
   let data = readData("data.json");
+
   const korisnik = data.find((korisnik) => korisnik.id === id);
   if (!korisnik) {
     return res.status(404).send("Korisnik nije pronađen!");
