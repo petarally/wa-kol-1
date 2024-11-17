@@ -37,7 +37,41 @@ app.post("/korisnici", (req, res) => {
   }
   data.push(body);
   fs.writeFileSync("data.json", JSON.stringify(data));
-  res.json(data);
+  res.status(200).json(data);
+});
+
+// Zadatak 4
+function addNewUser(novi) {
+  let data = readData("data.json");
+  const id_postoji = data.some((korisnik) => korisnik.id === novi.id);
+  if (id_postoji) {
+    return { status: 400, message: "Korisnik s tim ID-om već postoji!" };
+  }
+  data.push(novi);
+  fs.writeFileSync("data.json", JSON.stringify(data));
+  return { status: 200, data: data };
+}
+
+app.post("/zadatak4", (req, res) => {
+  const body = req.body;
+  const result = addNewUser(body);
+  if (result.status === 400) {
+    return res.status(400).send(result.message);
+  }
+  res.status(200).json(result.data);
+});
+
+// Zadatak 5
+app.get("/korisnici/:id", (req, res) => {
+  const id = req.params.id;
+  let data = readData("data.json");
+  const korisnik = data.find((korisnik) => korisnik.id === id);
+  if (!korisnik) {
+    return res.status(404).send("Korisnik nije pronađen!");
+  }
+  res
+    .status(200)
+    .json({ korisnik, message: `Uspješno dohvaćen korisnik s id-em ${id}` });
 });
 
 app.listen(3000, () => {
