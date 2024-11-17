@@ -1,1 +1,10 @@
-[{"id":"1","ime":"John","prezime":"Doe"},{"id":"2","ime":"Anna","prezime":"Smith"},{"id":"3","ime":"Peter","prezime":"Jones"},{"id":"4","ime":"Niko","prezime":"Belić"}]
+[
+  { "id": "1", "ime": "John", "prezime": "Doe" },
+  { "id": "2", "ime": "Anna", "prezime": "Smith" },
+  { "id": "3", "ime": "Peter", "prezime": "Jones" },
+  { "id": "4", "ime": "Niko", "prezime": "Belić" },
+  { "id": "5", "ime": "Niko", "prezime": "Belić" },
+  { "id": "6", "ime": "Niko", "prezime": "Belić" },
+  { "id": "7", "ime": "Niko", "prezime": "Belić" },
+  { "id": "8", "ime": "Ed", "prezime": "Eddy" }
+]

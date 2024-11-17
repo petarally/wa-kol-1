@@ -2,40 +2,42 @@ import express from "express";
 import fs from "fs";
 
 const app = express();
+app.use(express.json());
 
 function readData(file) {
-  const data = fs.readFileSync(file);
+  const data = fs.readFileSync(file, "utf-8");
   if (!data) {
     return "Datoteka nije pronađena!";
   }
   return JSON.parse(data);
 }
 
+// Zadatak 1
 app.get("/", (req, res) => {
   res.send("Pozdrav, Petar Prenc!");
 });
 
+// Zadatak 2
 app.get("/korisnici", (req, res) => {
-  res.send(readData("data.json"));
+  let data = readData("data.json");
+  res.send(data);
 });
 
-/*
-var = {id, ime, prezime} - memorija
-
-var2 = [{}, {}, {}] - memorija
-var2 = [{}, {}, {}, var] - memorija
-*/
-
+// Zadatak 3
 app.post("/korisnici", (req, res) => {
-  req.on("data", (data) => {
-    console.log(data);
-    const body = JSON.parse(data);
-    console.log(typeof body);
-    const users = readData("data.json");
-    users.push(body);
-    fs.writeFileSync("data.json", JSON.stringify(users));
-    res.send(users);
-  });
+  const body = req.body;
+  console.log(body);
+  let data = readData("data.json");
+  const kljucevi = Object.keys(data[0]);
+  console.log(kljucevi);
+  for (let atribut of kljucevi) {
+    if (!body[atribut]) {
+      return res.status(400).send(`Greška! Nedostaje atribut ${atribut}!`);
+    }
+  }
+  data.push(body);
+  fs.writeFileSync("data.json", JSON.stringify(data));
+  res.json(data);
 });
 
 app.listen(3000, () => {
